@@ -9,8 +9,8 @@ def send_request(endpoint_factory, endpoint,request_type, **kwargs):
     return response
 
 def load_test_data(file):
-    with open("api_db_tests/data/"+file) as file:
-        return json.load(file)
+    with open("api_db_tests/data/"+file) as f:
+        return json.load(f)
 
 class TestNegative:
 
@@ -29,8 +29,8 @@ class TestNegative:
     def test_update_user_invalidID(self,endpoint_factory,logger):
          #delete all data
         logger.info("Tüm kullanıcılar siliniyor.")
-        dalete_allUsers_result = send_request(endpoint_factory,requirements_for_test.allDelete,request_handler.delete_request)
-        assert dalete_allUsers_result.status_code == 200, "Negatif senaryo, güncelleme işlemi öncesi kullanıcılar silinemedi."
+        delete_all_users_result = send_request(endpoint_factory,requirements_for_test.allDelete,request_handler.delete_request)
+        assert delete_all_users_result.status_code == 200, "Negatif senaryo, güncelleme işlemi öncesi kullanıcılar silinemedi."
 
         #add users
         logger.info("Test için kullanıcı ekleniyor.")
@@ -63,8 +63,3 @@ class TestNegative:
         assert delete_user_result.status_code == 400 
         deleted_user_json = delete_user_result.json()
         assert deleted_user_json["message"] == "the data does not exist in the database"
-
-    
-    # @pytest.mark.parametrize("user_credentials",load_test_data())
-    # def test_route(self,endpoint_factory,user_credentials):
-    #     pass

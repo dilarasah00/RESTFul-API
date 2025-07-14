@@ -62,7 +62,7 @@ class TestUserFlowE2E:
         assert user_update_result.status_code == 200 ,"Güncelleme başarısız"
         updated_user_json= user_update_result.json()
         assert updated_user_json["message"] == 'the data was successfully updated in the database', "Güncelleme başarsız veya mesajda bir sorun var."
-        logger.info(f"{checked_user_json[-1]["username"]} isimli kullanıcının bilgileri güncellendi.")
+        logger.info(f"{checked_user_json[-1]['username']} isimli kullanıcının bilgileri güncellendi.")
 
 
         #check db again
@@ -74,11 +74,11 @@ class TestUserFlowE2E:
         logger.info("Güncellenen bilgiler ve db de bulunan bilgiler eşleşiyor")
         
         #delete user
-        logger.info(f"{checked_user_json[-1]["username"]} isimli kullanıcıyı silme işlemi başlatılıyor.")
+        logger.info(f"{checked_user_json[-1]['username']} isimli kullanıcıyı silme işlemi başlatılıyor.")
         delete_user_result = send_request(endpoint_factory,requirements_for_test.delete_data.format(id= checked_user_json[-1]["id"]),request_handler.delete_request)
         assert delete_user_result.status_code == 200, "Kullanıcı silinemedi"
         assert delete_user_result.json()["message"] == 'the data was successfully deleted from the database' ,"Kullanıcı silinemedi veya mesaj hatalı."
-        logger.info(f"{checked_user_json[-1]["username"]} isimli kullanıcı silindi.")
+        logger.info(f"{checked_user_json[-1]['username']} isimli kullanıcı silindi.")
 
         #check deleted user in db
         logger.info("Silinen kullanıcıyı kontol etmek için db ye bağlanılıyor.")
