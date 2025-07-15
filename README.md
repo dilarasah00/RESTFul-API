@@ -19,7 +19,7 @@ api_db_tests/
 ├── requirements_for_test.py # Testlerde kullanılan endpoint ve query tanımları
 ├── request_handler.py # HTTP istek yardımcı fonksiyonları (GET, POST, PUT, DELETE)
 └── conftest.py # Fixture’lar ve ortak yapılandırmalar
-
+```
 
 
 ## 🧪 Test Senaryoları
