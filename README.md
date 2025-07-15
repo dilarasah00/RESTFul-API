@@ -4,6 +4,8 @@ Bu proje, [ahmetozmtn/RESTFul-API](https://github.com/ahmetozmtn/RESTFul-API) i�
 
 Testler `api_db_tests` klasöründe, test sonuçları ise `test_report.md` dosyasında yer almaktadır.
 
+# Proje Klasör Yapısı
+```
 api_db_tests/
 ├── data/
 │ ├── add_users.json # Test için kullanılan geçerli kullanıcı verileri
