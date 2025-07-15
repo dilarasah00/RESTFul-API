@@ -1,225 +1,104 @@
-<h1 id="tr" style="text-align:center">
-RestFul API Example
-</h1>
+# RESTFUL-API TEST PROJESİ
 
-### Bu proje, Flask ve SQLAlchemy kullanılarak geliştirilmiş basit bir RESTful API örneği'dir.
+Bu proje, [ahmetozmtn/RESTFul-API](https://github.com/ahmetozmtn/RESTFul-API) için API ve Veritabanı kontrol testleri içermektedir.
 
-## Kurulum ve çalıştırma
+Testler `api_db_tests` klasöründe, test sonuçları ise `test_report.md` dosyasında yer almaktadır.
 
-<br>
+api_db_tests/
+├── data/
+│ ├── add_users.json # Test için kullanılan geçerli kullanıcı verileri
+│ └── invalid_data_for_add.json # Negatif test verileri (eksik/boş alanlar)
+│
+├── tests/
+│ ├── test_e2e.py # End-to-End (E2E) test senaryoları
+│ └── test_negative.py # Negatif test senaryoları
+│
+├── test_report.md # Uygulanan senaryo özeti ve gözlemler
+├── requirements_for_test.py # Testlerde kullanılan endpoint ve query tanımları
+├── request_handler.py # HTTP istek yardımcı fonksiyonları (GET, POST, PUT, DELETE)
+└── conftest.py # Fixture’lar ve ortak yapılandırmalar
 
-**Projeyi klonlama**
 
-```shell
-git clone CLONE_URL
-```
 
-**Proje klasörne girin**
+## 🧪 Test Senaryoları
 
-```shell
-cd RESTFul-API
-```
+### ✅ 1. Pozitif Senaryolar (Happy Path)
 
-**Gerekli bağımlılıkları yüklemek için**
+- **[POST] /api/addData**  
+  Kullanıcı başarıyla eklenmeli.
 
-```shell
+- **[GET] /api/getData**  
+  Tüm kullanıcılar eksiksiz şekilde getirilmeli.
+
+- **[PUT] /api/updateData/<id>**  
+  Kullanıcı başarıyla güncellenmeli.
+
+- **[DELETE] /api/deleteData/<id>**  
+  Belirtilen kullanıcı başarıyla silinmeli.
+
+- **[DELETE] /api/allDelete**  
+  Tüm kullanıcılar eksiksiz şekilde silinmeli.
+
+- **Veritabanı Kontrolleri:**  
+  - Eklenen kullanıcılar veritabanında yer almalı.  
+  - Güncellenen bilgiler veritabanında değişmiş olmalı.  
+  - Silinen kullanıcılar veritabanında bulunmamalı.
+
+---
+
+### ❌ 2. Negatif Senaryolar (Olumsuz Kullanım)
+
+- Eksik alanlarla kayıt ekleme denemesi  
+- Boş alanlarla kayıt ekleme denemesi  
+- Var olmayan bir ID ile kullanıcı güncelleme  
+- Var olmayan bir ID ile kullanıcı silme
+
+
+
+## 🧪 Testleri Çalıştırmak
+
+### 1️⃣ Ortamı Hazırlama
+
+Projeyi klonladıktan sonra, testlerin çalışması için gerekli bağımlılıkları yükleyin:
+
+```bash
+# Sanal ortam oluştur (isteğe bağlı ama önerilir)
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+# Gereken paketleri yükle
 pip install -r requirements.txt
 ```
 
-**Projeyi çalıştırma**
+---
 
--   Linux & Mac OS X
+### 2️⃣ API Uygulamasını Başlatma
 
-```shell
-python3 main.py
-```
+Testlerin doğru çalışabilmesi için, API sunucusunun aktif olması gerekir.
 
--   Windows
-
-```shell
+```bash
 python main.py
 ```
 
-<br>
+API başarıyla çalıştığında aşağıdaki uç noktalar (endpoints) aktif olur:
 
-## Kullanım
+- `POST /api/addData`
+- `GET /api/getData`
+- `DELETE /api/deleteData/<id>`
+- `DELETE /api/allDelete`
+- `PUT /api/updateData/<id>`
 
-Proje aşağıdaki endpointleri sağlamaktadır:
+---
 
--   `api/addData`: Veritabanına yeni bir kayıt eklemek için POST isteği yapılır.
-    -   Örnek kullanım: `api/addData/1`
-    -   Uyarı!!! ; POST istediği atarken eklemek istediğiniz verilerin JSON formatında, isteğin Body kısmına ekleminiz gerekiyor.
-        -   Örnek;
-            ```json
-            {
-                "username": "username",
-                "password": "password",
-                "email": "example@example.com",
-                "phone": "0555555555",
-                "address": "example example",
-                "city": "City",
-                "state": "State",
-                "product_name": "Product Name"
-            }
-            ```
+### 3️⃣ Testleri Çalıştırma
 
-<br>
+Test senaryoları `api_db_tests/tests/` klasöründe yer almaktadır.
 
--   `api/deleteData/<int:id>`: Belirtilen ID'ye sahip kaydı silmek için DELETE isteği yapılır.
-    -   Örnek kullanım : `api/deleteData/1`
+Tüm testleri çalıştırmak için:
 
-<br>
-
--   `api/getData`: Tüm kayıtları getirmek için GET isteği yapılır.
-
-<br>
-
--   `api/allDelete`: Tüm kayıtları silmek için DELETE isteği yapılır.
-
-<br>
-
--   `api/updateData/<int:id>`: Belirtilen ID'ye sahip kaydı güncellemek için PUT isteği yapılır.
-    -   Örnek kullanım: `api/updateData/1`
-    -   Uyarı!!! ; PUT istediği atarken güncellemek istediğiniz verilerin JSON formatında isteğin Body kısmına ekleminiz gerekiyor
-        -   Örnek;
-        ```json
-        {
-            "username": "username",
-            "password": "password",
-            "email": "example@example.com",
-            "phone": "0555555555",
-            "address": "example example",
-            "city": "City",
-            "state": "State",
-            "product_name": "Product Name"
-        }
-        ```
-
-## Veritabanı
-
-Projede SQLAlchemy kullanılarak bir SQLite veritabanı kullanılmaktadır. Veritabanı şeması ve tablo yapısı için `models.py` dosyasına bakabilirsiniz.
-
-## Katkılar
-
-Eğer projeye katkıda bulunmak isterseniz, lütfen bir Pull Requets oluşturun. Katkılarınızı bekliyoruz!
-
-## Lisans
-
-Bu proje [MIT lisansı](LICENSE) altında lisanslanmıştır.
-
-<br>
-
-<h1 id="eng" style="text-align:center">
-RESTful API Example
-</h1>
-
-### This project is a simple example of a RESTful API developed using Flask and SQLAlchemy.
-
-## Installation and Running
-
-<br>
-
-**Clone the project**
-
-```shell
-git clone CLONE_URL
+```bash
+pytest api_db_tests/tests/
 ```
 
-**Navigate to the project folder**
-
-```shell
-cd RESTFul-API
-```
-
-**Install the required dependencies**
-
-```shell
-pip install -r requirements.txt
-```
-
-**Run the project**
-
--   Linux & Mac OS X
-
-```shell
-python3 main.py
-```
-
--   Windows
-
-```shell
-python main.py
-```
-
-<br>
-
-## Usage
-
-The project provides the following endpoints:
-
--   `api/addData`: Make a POST request to add a new record to the database.
-
-    -   Example usage: `api/addData/1`
-    -   Warning!!! ; When sending a POST request, you need to add the data you want to add in JSON format to the Body of the request.
-
-        -   Example;
-
-            ```json
-            {
-                "username": "username",
-                "password": "password",
-                "email": "example@example.com",
-                "phone": "0555555555",
-                "address": "example example",
-                "city": "City",
-                "state": "State",
-                "product_name": "Product Name"
-            }
-            ```
-
-<br>
-
--   `api/deleteData/<int:id>`: Make a DELETE request to delete a record with the specified ID.
-    -   Example usage : `api/deleteData/1`
-
-<br>
-
--   `api/getData`: Make a GET request to retrieve all records.
-
-<br>
-
--   `api/allDelete`: Make a DELETE request to delete all records.
-
-<br>
-
--   `api/updateData/<int:id>`: Make a PUT request to update a record with the specified ID.
-
-    -   Example usage: `api/updateData/1`
-    -   Warning!!! ; When sending a PUT request, you need to add the data you want to update in JSON format to the Body of the request
-
-        -   Example;
-
-            ```json
-            {
-                "username": "username",
-                "password": "password",
-                "email": "example@example.com",
-                "phone": "0555555555",
-                "address": "example example",
-                "city": "City",
-                "state": "State",
-                "product_name": "Product Name"
-            }
-            ```
-
-## Database
-
-In the project, SQLAlchemy is used to use an SQLite database. You can refer to the `models.py` file for the database schema and table structure.
-
-## Contributions
-
-If you would like to contribute to the project, please create a Pull Request. We welcome your contributions!
-
-## License
-
-This project is licensed under the [MIT license](LICENSE).
+> ✅ Test çıktıları terminalde gösterilir. Ayrıca `test_logs.log` dosyasına log bilgileri yazılır.
